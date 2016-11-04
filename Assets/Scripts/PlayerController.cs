@@ -24,7 +24,8 @@ public class PlayerController : MonoBehaviour
         if(Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
-            Instantiate(shot, shotSpawn.position, shotSpawn.rotation);
+            //Eliminada la dirección y de rotation debido al movimiento hacia adelante y atrás de la nave.
+            Instantiate(shot, shotSpawn.position, Quaternion.Euler(shotSpawn.rotation.z, 0.0f, shotSpawn.rotation.x));
         }
     }
 
@@ -33,18 +34,18 @@ public class PlayerController : MonoBehaviour
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");
 
-        Rigidbody rigibody = GetComponent<Rigidbody>();
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
 
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
-        rigibody.velocity = movement * speed;
+        rigidbody.velocity = movement * speed;
 
-        rigibody.position = new Vector3
+        rigidbody.position = new Vector3
         (
-            Mathf.Clamp(rigibody.position.x, boundary.xMin, boundary.xMax), 
+            Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax), 
             0.0f,
-            Mathf.Clamp(rigibody.position.z, boundary.zMin, boundary.zMax)
+            Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
         );
-        rigibody.rotation = Quaternion.Euler(rigibody.velocity.z * tilt, 0.0f, rigibody.velocity.x * - tilt);
+        rigidbody.rotation = Quaternion.Euler(rigidbody.velocity.z * tilt, 0.0f, rigidbody.velocity.x * - tilt);
     }
 
 }
