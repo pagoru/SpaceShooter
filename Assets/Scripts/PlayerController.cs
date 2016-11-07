@@ -16,16 +16,31 @@ public class PlayerController : MonoBehaviour
     public GameObject shot;
     public Transform shotSpawn;
     public float fireRate;
+    public int negativeScoreForEveryFire;
 
     private float nextFire;
+    private GameController gameController;
 
     void Update()
     {
-        if(Input.GetButton("Fire1") && Time.time > nextFire)
+        GameObject gameControllerObject = GameObject.FindWithTag("GameController");
+        if (gameControllerObject != null)
+        {
+            gameController = gameControllerObject.GetComponent<GameController>();
+        }
+        if (gameController == null)
+        {
+            Debug.Log("Error with 'Gamecontroller'");
+        }
+
+        if (Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             //Eliminada la dirección y de rotation debido al movimiento hacia adelante y atrás de la nave.
             Instantiate(shot, shotSpawn.position, Quaternion.Euler(shotSpawn.rotation.z, 0.0f, shotSpawn.rotation.x));
+
+            GetComponent<AudioSource>().Play();
+            gameController.AddScore(negativeScoreForEveryFire);
         }
     }
 
