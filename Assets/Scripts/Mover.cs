@@ -10,4 +10,11 @@ public class Mover : MonoBehaviour
         Rigidbody rigidbody = GetComponent<Rigidbody>();
         rigidbody.velocity = transform.forward * speed;
     }
+
+    void Update()
+    {
+        Rigidbody rigidbody = GetComponent<Rigidbody>();
+        Vector3 position = rigidbody.transform.position;
+        rigidbody.transform.position = new Vector3(position.x, 0.0f, position.z);
+    }
 }
