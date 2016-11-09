@@ -10,6 +10,9 @@ public class GameController : MonoBehaviour {
     public float startWait;
     public float spawnWait;
 
+    public float minHazardSize;
+    public float maxHazardSize;
+
     public Canvas canvasGUI;
 
     private bool gameOver;
@@ -50,12 +53,22 @@ public class GameController : MonoBehaviour {
                 canvasGUI.transform.Find("RestartText").GetComponent<Text>().text = "Press 'R' for Restart";
                 restart = true;
             }
-            Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
-            Quaternion spawnRotation = Quaternion.identity;
-            Instantiate(hazards[Random.Range(0, hazards.Length)], spawnPosition, spawnRotation);
+            spawnHazard();
             yield return new WaitForSeconds(spawnWait);
         }
 
+    }
+
+    private void spawnHazard()
+    {
+        Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
+        Quaternion spawnRotation = Quaternion.identity;
+        GameObject hazard = hazards[Random.Range(0, hazards.Length)];
+
+        float size = Random.Range(minHazardSize, maxHazardSize);
+        hazard.transform.localScale = new Vector3(size, size, size);
+        
+        GameObject gameObejct = (GameObject)Instantiate(hazard, spawnPosition, spawnRotation);
     }
 
     public void AddScore(int newScoreValue)

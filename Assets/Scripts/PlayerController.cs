@@ -22,11 +22,6 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        
-    }
-
-    void FixedUpdate()
-    {
         if (Input.GetButton("Fire1") && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
@@ -35,6 +30,10 @@ public class PlayerController : MonoBehaviour
 
             GetComponent<AudioSource>().Play();
         }
+    }
+
+    void FixedUpdate()
+    {
 
         float moveHorizontal = Input.GetAxis("Horizontal");
         float moveVertical = Input.GetAxis("Vertical");

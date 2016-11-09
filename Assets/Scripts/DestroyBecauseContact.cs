@@ -27,6 +27,7 @@ public class DestroyBecauseContact : MonoBehaviour {
         switch (other.tag)
         {
             case "Asteroid":
+            case "AsteroidBackground":
                 break;
             case "Player":
                 Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
@@ -34,7 +35,8 @@ public class DestroyBecauseContact : MonoBehaviour {
                 DestroyAll(other);
                 break;
             case "Bolt":
-                gameController.AddScore(scorevalue);
+                int score = (int)Mathf.Abs((transform.localScale.x * scorevalue) - (scorevalue * 2));
+                gameController.AddScore(score);
                 DestroyAll(other);
                 break;
         }
