@@ -43,6 +43,11 @@ public class GameController : MonoBehaviour {
         }
     }
 
+    public int getScore()
+    {
+        return score;
+    }
+
     IEnumerator SpawnWaves()
     {
         yield return new WaitForSeconds(startWait);
