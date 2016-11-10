@@ -73,7 +73,7 @@ public class GameController : MonoBehaviour {
         float size = Random.Range(minHazardSize, maxHazardSize);
         hazard.transform.localScale = new Vector3(size, size, size);
         
-        GameObject gameObejct = (GameObject)Instantiate(hazard, spawnPosition, spawnRotation);
+        Instantiate(hazard, spawnPosition, spawnRotation);
     }
 
     public void AddScore(int newScoreValue)
@@ -101,6 +101,21 @@ public class GameController : MonoBehaviour {
     {
         canvasGUI.transform.Find("GameOverText").GetComponent<Text>().text = "GAME OVER";
         gameOver = true;
+    }
+
+    public void showHearts(int number)
+    {
+        string heartsText = "";
+        
+        if (number > 0)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                heartsText += "❤ ";
+            }
+            heartsText = heartsText.Substring(0, heartsText.Length - 1);
+        }
+        canvasGUI.transform.Find("HeartsText").GetComponent<Text>().text = heartsText;
     }
 
 }

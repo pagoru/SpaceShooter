@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
 
     private float nextFire;
     private GameController gameController;
+
+    private int hearts;
     
     void Start()
     {
@@ -33,6 +35,8 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Error with 'Gamecontroller'");
         }
+        hearts = 4;
+        gameController.showHearts(hearts);
     }
 
     void Update()
@@ -62,6 +66,23 @@ public class PlayerController : MonoBehaviour
 
             GetComponent<AudioSource>().Play();
         }
+    }
+
+    public void SubstractHeart()
+    {
+        hearts--;
+        gameController.showHearts(getHearts());
+    }
+
+    public void AddHeart()
+    {
+        hearts++;
+        gameController.showHearts(getHearts());
+    }
+
+    public int getHearts()
+    {
+        return hearts;
     }
 
     private void SingleShoot()

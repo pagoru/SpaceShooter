@@ -1,16 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DestroyBecauseContact : MonoBehaviour {
+public class DestroyByContact : MonoBehaviour {
 
     public GameObject explosion;
     public GameObject playerExplosion;
     public int scorevalue;
 
     private GameController gameController;
+    private PlayerController playerController;
 
     void Start()
     {
+        GameObject playerControllerObject = GameObject.FindWithTag("Player");
+        if (playerControllerObject != null)
+        {
+            playerController = playerControllerObject.GetComponent<PlayerController>();
+        }
+
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
         if(gameControllerObject != null)
         {
@@ -27,12 +34,22 @@ public class DestroyBecauseContact : MonoBehaviour {
         switch (other.tag)
         {
             case "Asteroid":
-            case "AsteroidBackground":
                 break;
             case "Player":
-                Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-                gameController.GameOver();
-                DestroyAll(other);
+                if(playerController != null)
+                {
+                    playerController.SubstractHeart();
+
+                    if (playerController.getHearts() <= 0)
+                    {
+                        Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+                        gameController.GameOver();
+                        DestroyAll(other);
+                        return;
+                    }
+                }
+                Instantiate(explosion, transform.position, transform.rotation);
+                Destroy(gameObject);
                 break;
             case "Bolt":
                 int score = (int)Mathf.Abs((transform.localScale.x * scorevalue) - (scorevalue * 2));
