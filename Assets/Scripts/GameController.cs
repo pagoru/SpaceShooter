@@ -62,7 +62,6 @@ public class GameController : MonoBehaviour {
         {
             if (gameOver)
             {
-                canvasGUI.transform.Find("RestartText").GetComponent<Text>().text = "Press 'R' for Restart";
                 restart = true;
             }
             GameObject hazard = hazards[Random.Range(0, hazards.Length)];
@@ -117,6 +116,7 @@ public class GameController : MonoBehaviour {
     public void GameOver()
     {
         canvasGUI.transform.Find("GameOverText").GetComponent<Text>().text = "GAME OVER";
+        canvasGUI.transform.Find("RestartText").GetComponent<Text>().text = "Press 'R' for Restart";
         gameOver = true;
     }
 
