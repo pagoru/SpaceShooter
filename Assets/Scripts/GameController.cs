@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Assets.Scripts;
 
 public class GameController : MonoBehaviour {
 
@@ -13,11 +14,16 @@ public class GameController : MonoBehaviour {
     public float minHazardSize;
     public float maxHazardSize;
 
+    public GameObject medicalBox;
+    public int timeEveryMedicalBox;
+
     public Canvas canvasGUI;
 
     private bool gameOver;
     private bool restart;
     private int score;
+
+    private long lastTimeMedicalBox;
 
     void Start()
     {
@@ -29,6 +35,7 @@ public class GameController : MonoBehaviour {
         score = 0;
         UpdateScore();
         StartCoroutine(SpawnWaves());
+        lastTimeMedicalBox = Utils.getTimestamp();
     }
 
     void Update()
@@ -58,22 +65,32 @@ public class GameController : MonoBehaviour {
                 canvasGUI.transform.Find("RestartText").GetComponent<Text>().text = "Press 'R' for Restart";
                 restart = true;
             }
-            spawnHazard();
+            GameObject hazard = hazards[Random.Range(0, hazards.Length)];
+            spawnGameObejct(hazard);
+
+            long currentTime = Utils.getTimestamp();
+            if(lastTimeMedicalBox + timeEveryMedicalBox <= currentTime)
+            {
+                spawnGameObejct(medicalBox);
+                lastTimeMedicalBox = currentTime;
+            }
             yield return new WaitForSeconds(spawnWait);
         }
 
     }
 
-    private void spawnHazard()
+    private void spawnGameObejct(GameObject gObject)
     {
         Vector3 spawnPosition = new Vector3(Random.Range(-spawnValues.x, spawnValues.x), spawnValues.y, spawnValues.z);
         Quaternion spawnRotation = Quaternion.identity;
-        GameObject hazard = hazards[Random.Range(0, hazards.Length)];
 
-        float size = Random.Range(minHazardSize, maxHazardSize);
-        hazard.transform.localScale = new Vector3(size, size, size);
+        if (gObject.tag == "Asteroid")
+        {
+            float size = Random.Range(minHazardSize, maxHazardSize);
+            gObject.transform.localScale = new Vector3(size, size, size);
+        }
         
-        Instantiate(hazard, spawnPosition, spawnRotation);
+        Instantiate(gObject, spawnPosition, spawnRotation);
     }
 
     public void AddScore(int newScoreValue)

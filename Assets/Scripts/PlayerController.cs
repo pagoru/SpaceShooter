@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 [System.Serializable]
 public class Boundary
@@ -21,12 +22,13 @@ public class PlayerController : MonoBehaviour
 
     public Camera mainCamera;
     public GameObject starfield;
+    public GameObject background;
 
     private float nextFire;
     private GameController gameController;
 
     private int hearts;
-    
+
     void Start()
     {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -38,7 +40,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("Error with 'Gamecontroller'");
         }
-        hearts = 4;
+        hearts = 3;
         gameController.showHearts(hearts);
     }
 
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
     {
         hearts++;
         gameController.showHearts(getHearts());
+
     }
 
     public int getHearts()
@@ -135,6 +138,7 @@ public class PlayerController : MonoBehaviour
         rigidbody.position = position;
         mainCamera.transform.position = new Vector3(position.x, position.y + 5f, position.z - 4.0f);
         starfield.transform.position = new Vector3(position.x, position.y + 6f, position.z + 70f);
+        background.transform.position = new Vector3(position.x - 50f, position.y - 15f, position.z + 300f);
 
 
         rigidbody.rotation = Quaternion.Euler(rigidbody.velocity.z * tilt, 0.0f, rigidbody.velocity.x * - tilt);

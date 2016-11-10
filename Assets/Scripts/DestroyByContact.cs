@@ -23,10 +23,6 @@ public class DestroyByContact : MonoBehaviour {
         {
             gameController = gameControllerObject.GetComponent<GameController>();
         }
-        if(gameController == null)
-        {
-            Debug.Log("Error with 'Gamecontroller'");
-        }
     }
 
     void OnTriggerEnter(Collider other)
@@ -34,6 +30,10 @@ public class DestroyByContact : MonoBehaviour {
         switch (other.tag)
         {
             case "Asteroid":
+                break;
+            case "Enemy":
+                Instantiate(explosion, transform.position, transform.rotation);
+                Destroy(gameObject);
                 break;
             case "Player":
                 if(playerController != null)
