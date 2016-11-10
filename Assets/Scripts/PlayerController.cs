@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public Transform shotSpawn;
     public float fireRate;
 
+    public Camera mainCamera;
+    public GameObject starfield;
+
     private float nextFire;
     private GameController gameController;
 
@@ -123,13 +126,19 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = new Vector3(moveHorizontal, 0.0f, moveVertical);
         rigidbody.velocity = movement * speed;
 
-        rigidbody.position = new Vector3
+        Vector3 position = new Vector3
         (
             Mathf.Clamp(rigidbody.position.x, boundary.xMin, boundary.xMax), 
             0.0f,
             Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
         );
+        rigidbody.position = position;
+        mainCamera.transform.position = new Vector3(position.x, position.y + 5f, position.z - 4.0f);
+        starfield.transform.position = new Vector3(position.x, position.y + 6f, position.z + 70f);
+
+
         rigidbody.rotation = Quaternion.Euler(rigidbody.velocity.z * tilt, 0.0f, rigidbody.velocity.x * - tilt);
+
     }
 
 }
