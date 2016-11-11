@@ -63,6 +63,7 @@ public class EnemyController : MonoBehaviour
         if(lastTimeBoltFired + timeBoltFired < Utils.getTimestamp())
         {
             Vector3 pos = transform.position;
+            GetComponent<AudioSource>().Play();
             Instantiate(shot, new Vector3(pos.x, 0.0f, pos.z - 0.8f), shot.transform.rotation);
 
             lastTimeBoltFired = Utils.getTimestamp();
