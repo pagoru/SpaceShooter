@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System;
 
 [System.Serializable]
 public class Boundary
@@ -10,6 +11,10 @@ public class Boundary
 
 public class PlayerController : MonoBehaviour
 {
+    public GameObject explosion;
+    public GameObject enemyExplosion;
+    public GameObject playerExplosion;
+
     public float speed;
     public float tilt;
     public Boundary boundary;
@@ -29,6 +34,10 @@ public class PlayerController : MonoBehaviour
 
     private int hearts;
 
+    private Vector3 initialMainCamera;
+    private Vector3 initialStarfield;
+    private Vector3 initialBackground;
+
     void Start()
     {
         GameObject gameControllerObject = GameObject.FindWithTag("GameController");
@@ -42,6 +51,10 @@ public class PlayerController : MonoBehaviour
         }
         hearts = 3;
         gameController.showHearts(hearts);
+
+        initialMainCamera = mainCamera.transform.position;
+        initialStarfield = starfield.transform.position;
+        initialBackground = background.transform.position;
     }
 
     void Update()
@@ -136,13 +149,45 @@ public class PlayerController : MonoBehaviour
             Mathf.Clamp(rigidbody.position.z, boundary.zMin, boundary.zMax)
         );
         rigidbody.position = position;
-        mainCamera.transform.position = new Vector3(position.x, position.y + 5f, position.z - 4.0f);
-        starfield.transform.position = new Vector3(position.x, position.y + 6f, position.z + 70f);
-        background.transform.position = new Vector3(position.x - 50f, position.y - 15f, position.z + 300f);
-
-
+        mainCamera.transform.position = new Vector3(position.x + initialMainCamera.x, position.y + initialMainCamera.y, position.z + initialMainCamera.z);
+        starfield.transform.position = new Vector3(position.x + initialStarfield.x, position.y + initialStarfield.y, position.z + initialStarfield.z);
+        background.transform.position = new Vector3(position.x + initialBackground.x, position.y + initialBackground.y, position.z + +initialBackground.z);
+        
         rigidbody.rotation = Quaternion.Euler(rigidbody.velocity.z * tilt, 0.0f, rigidbody.velocity.x * - tilt);
 
     }
 
+    void OnTriggerEnter(Collider other)
+    {
+        switch (other.tag)
+        {
+            case "Enemy":
+            case "EnemyBolt":
+                if (other.tag == "Enemy")
+                {
+                    SubstractHeart();
+                    SubstractHeart();
+                    SubstractHeart();
+                }
+                SubstractHeartOrGameOver(other.gameObject);
+                break;
+        }
+    }
+
+    public void SubstractHeartOrGameOver(GameObject other)
+    {
+        SubstractHeart();
+        if (getHearts() <= 0)
+        {
+            Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
+            gameController.GameOver();
+
+            Instantiate(explosion, transform.position, transform.rotation);
+            Destroy(other.gameObject);
+            Destroy(gameObject);
+            return;
+        }
+        Instantiate(enemyExplosion, transform.position, transform.rotation);
+        Destroy(other.gameObject);
+    }
 }

@@ -32,24 +32,12 @@ public class DestroyByContact : MonoBehaviour {
             case "Asteroid":
                 break;
             case "Enemy":
+            case "EnemyBolt":
                 Instantiate(explosion, transform.position, transform.rotation);
                 Destroy(gameObject);
                 break;
             case "Player":
-                if(playerController != null)
-                {
-                    playerController.SubstractHeart();
-
-                    if (playerController.getHearts() <= 0)
-                    {
-                        Instantiate(playerExplosion, other.transform.position, other.transform.rotation);
-                        gameController.GameOver();
-                        DestroyAll(other);
-                        return;
-                    }
-                }
-                Instantiate(explosion, transform.position, transform.rotation);
-                Destroy(gameObject);
+                playerController.SubstractHeartOrGameOver(gameObject);
                 break;
             case "Bolt":
                 int score = (int)Mathf.Abs((transform.localScale.x * scorevalue) - (scorevalue * 2));

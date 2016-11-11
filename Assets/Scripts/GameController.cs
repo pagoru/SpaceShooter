@@ -17,12 +17,16 @@ public class GameController : MonoBehaviour {
     public GameObject medicalBox;
     public int timeEveryMedicalBox;
 
+    public GameObject enemy;
+    public int timeEveryEnemy;
+
     public Canvas canvasGUI;
 
     private bool gameOver;
     private bool restart;
     private int score;
 
+    private long lastTimeEnemy;
     private long lastTimeMedicalBox;
 
     void Start()
@@ -72,6 +76,11 @@ public class GameController : MonoBehaviour {
             {
                 spawnGameObejct(medicalBox);
                 lastTimeMedicalBox = currentTime;
+            }
+            if(lastTimeEnemy + timeEveryEnemy <= currentTime)
+            {
+                spawnGameObejct(enemy);
+                lastTimeEnemy = currentTime;
             }
             yield return new WaitForSeconds(spawnWait);
         }
